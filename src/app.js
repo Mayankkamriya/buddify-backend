@@ -7,6 +7,8 @@ const projectRoutes = require('./routes/project.routes');
 const bidRoutes = require('./routes/bid.routes');
 const deliverableRoutes = require('./routes/deliverable.routes');
 const { PrismaClient } = require('@prisma/client');
+const  requestOTP = require('./routes/auth/requestOTP');
+const { verifyOTP } = require('./routes/auth/verifyOTP');
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 
+app.use('/api/requestotp', requestOTP);
+app.use('/api/verifyotp', verifyOTP);
 
 app.use('/api/projects', projectRoutes);
 app.use('/api/bids', bidRoutes);
