@@ -6,7 +6,18 @@ const prisma = new PrismaClient();
 const signup = async (req, res) => {
   const { name, email, password, role } = req.body;
 
+  // Basic validation for required fields
+  if (!name || !email || !password || !role) {
+    return res.status(400).json({ message: 'All fields are required: name, email, password, role' });
+  }
+
   try {
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({ message: 'User with this email already exists' });
+    }
+
     const hashed = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -21,12 +32,17 @@ const signup = async (req, res) => {
     const token = generateToken(user);
     res.status(201).json({ token });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+
+  // Basic validation for required fields
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
