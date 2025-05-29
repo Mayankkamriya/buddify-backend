@@ -1,0 +1,81 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     // Either BUYER or SELLER
+  createdAt DateTime @default(now())
+
+  // Relations
+  projectsCreated Project[] @relation("BuyerProjects")
+  bids            Bid[]
+  projectsTaken   Project[] @relation("SellerProjects")
+}
+
+model Project {
+  id             String     @id @default(uuid())
+  title          String
+  description    String
+  budgetMin      Float
+  budgetMax      Float
+  deadline       DateTime
+  status         ProjectStatus @default(PENDING)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Foreign Keys
+  buyerId        String
+  buyer          User       @relation("BuyerProjects", fields: [buyerId], references: [id])
+
+  sellerId       String?    // Nullable until a seller is selected
+  seller         User?      @relation("SellerProjects", fields: [sellerId], references: [id])
+
+  bids           Bid[]
+  deliverables   Deliverable[]
+}
+
+model Bid {
+  id             String   @id @default(uuid())
+  amount         Float
+  estimatedTime  String
+  message        String
+  createdAt      DateTime @default(now())
+
+  // Relations
+  sellerId       String
+  seller         User     @relation(fields: [sellerId], references: [id])
+
+  projectId      String
+  project        Project  @relation(fields: [projectId], references: [id])
+}
+
+model Deliverable {
+  id          String   @id @default(uuid())
+  fileUrl     String
+  submittedAt DateTime @default(now())
+
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+}
+
+enum Role {
+  BUYER
+  SELLER
+}
+
+enum ProjectStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
