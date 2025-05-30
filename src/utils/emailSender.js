@@ -10,7 +10,7 @@ dotenv.config();
     pass: process.env.PASS,
   },
 });
-console.log( process.env.EMAIL, process.env.PASS)
+// console.log( process.env.EMAIL, process.env.PASS)
  const sendOTPEmail = async (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL,
