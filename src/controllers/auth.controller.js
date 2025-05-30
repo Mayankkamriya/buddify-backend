@@ -30,7 +30,7 @@ const signup = async (req, res) => {
     });
 
     const token = generateToken(user);
-    res.status(201).json({ token });
+    res.status(201).json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -52,7 +52,7 @@ const login = async (req, res) => {
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
     const token = generateToken(user);
-    res.status(200).json({ token });
+    res.status(200).json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
