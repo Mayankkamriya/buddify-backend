@@ -25,10 +25,16 @@ const createBid = async (req, res) => {
       return res.status(403).json({ message: "You cannot bid on your own project." });
     }
 
+   const seller = await prisma.user.findUnique({
+      where: { id: sellerId },
+      select: { name: true }
+    });
+
     const bid = await prisma.bid.create({
       data: {
         projectId,
         sellerId,
+        sellerName: seller.name,
         amount,
         estimatedTime,
         message

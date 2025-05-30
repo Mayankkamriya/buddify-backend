@@ -53,7 +53,7 @@ model Bid {
   estimatedTime  String
   message        String
   createdAt      DateTime @default(now())
-
+  sellerName String @default("Unknown")
   // Relations
   sellerId       String
   seller         User     @relation(fields: [sellerId], references: [id])

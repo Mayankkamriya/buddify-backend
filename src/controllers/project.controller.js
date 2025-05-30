@@ -27,7 +27,10 @@ const createProject = async (req, res) => {
 const getAllProjects = async (req, res) => {
   try {
     const projects = await prisma.project.findMany({
-      where: { status: 'PENDING' }
+      where: { status: 'PENDING' },
+      include: {
+        bids: true,
+      },
     });
     res.json(projects);
   } catch (err) {
