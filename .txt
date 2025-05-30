@@ -1,1 +1,0 @@
-now this commit is we are doing for note that now my vercel url can be use for postman and it working successfully for that i have done lot of changes in file the fill changes can be seen throw git history and most important thing that work for me is by changing Database url and add in a new databseurl of something like pooler 

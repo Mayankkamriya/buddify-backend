@@ -29,7 +29,7 @@ app.use('/api/deliverables', deliverableRoutes);
 
 // Sample health route
 app.get('/', (req, res) => {
-  res.send('Seller-Buyer API is running ✅');
+  res.send('Seller-Buyer Bid API is running ✅');
 });
 
 // Routes will go here later

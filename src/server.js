@@ -4,9 +4,6 @@ const { PrismaClient } = require('@prisma/client');
 
 const PORT = process.env.PORT || 5000;
 
-// Debug: Verify the database URL is loaded
-console.log('Database URL:', process.env.DATABASE_URL);
-
 const prisma = new PrismaClient({
   datasources: {
     db: {
@@ -17,12 +14,14 @@ const prisma = new PrismaClient({
 
 async function startServer() {
   try {
-    await prisma.$connect();
-    console.log('✅ Successfully connected to the database.');
     
     app.listen(PORT, () => {
       console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
+
+    await prisma.$connect();
+    console.log('✅ Successfully connected to the database.');
+    
   } catch (error) {
     console.error('❌ Failed to connect to the database:', error);
     process.exit(1);
@@ -30,12 +29,3 @@ async function startServer() {
 }
 
 startServer();
-
-
-// // src/server.js
-// const app = require('./app');
-// const PORT = process.env.PORT || 5000;
-
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on http://localhost:${PORT}`);
-// });

@@ -5,7 +5,7 @@ const { allowRoles } = require('../middlewares/role.middleware');
 
 const router = express.Router();
 
-router.post('/', isAuthenticated, allowRoles('SELLER'), createProject);
+router.post('/', isAuthenticated, allowRoles('BUYER'), createProject);
 router.get('/', isAuthenticated, getAllProjects);
 router.put('/:projectId/status', isAuthenticated, allowRoles('SELLER'), updateProjectStatus);
 
