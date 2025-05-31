@@ -30,7 +30,7 @@ const verifyOTP = async (req, res) => {
   if (!user) {
 
   const hashedPassword = await bcrypt.hash(stored.password, 10);
-  const user = await prisma.user.create({
+  user = await prisma.user.create({
     data: {
       name: stored.name,
       email,
@@ -43,7 +43,7 @@ const verifyOTP = async (req, res) => {
   deleteOTP(email); // Clean up OTP
 
   const token = generateToken(user);
-  res.status(201).json({ token });
+  res.status(201).json({ token, user });
 };
 
 module.exports = { verifyOTP };

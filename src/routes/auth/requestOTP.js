@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
     role,
     expiresAt: Date.now() + 5 * 60 * 1000,
   });
-console.log(email,otp)
+// console.log(email,otp)
   await sendOTPEmail(email, otp);
 
   return res.json({ message: "OTP sent to email" });
