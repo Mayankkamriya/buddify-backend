@@ -45,7 +45,8 @@ const login = async (req, res) => {
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email },
+      include: { bids: true } });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const match = await bcrypt.compare(password, user.password);
@@ -58,4 +59,40 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+const getUserDetails = async (req, res) => {
+  try {
+    
+    const userId = req.user.id;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        projectsCreated: true,
+        projectsTaken: true,
+        bids: true
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      status: 'success',
+      data: user
+    });
+  } catch (err) {
+    console.error('Error in getUserDetails:', err);
+    res.status(500).json({ 
+      status: 'error',
+      message: err.message 
+    });
+  }
+};
+
+module.exports = { signup, login,getUserDetails };
